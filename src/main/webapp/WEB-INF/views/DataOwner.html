@@ -1,0 +1,172 @@
+
+<html>
+  <head>  
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    
+    <title>AngularJS $http Rest example</title>  
+ <script type="text/javascript">
+            
+    var app=angular.module("app",[]);
+	app.controller("myController",function($scope,$http){
+		
+		$scope.submitCountry=function(countryName,population){
+		
+			var countryManager={
+                           countryName:countryName,
+                           population:population
+                          }
+
+			
+			alert('inside method='+countryName)
+			$http.post('http://localhost:8010/ConcentMgt/consentapi/submitConsent',countryManager).then(
+			
+			 //alert('Inside Method'+countryName); 
+							function(response){
+                                  $scope.countryManager=response;
+                           },
+                           function(response){
+                                  $scope.error=response;
+                           }
+							
+			
+			
+			);
+		};
+		
+		
+		
+		
+	});
+            
+        </script>
+        <!-- <style>
+           
+.blue-button{
+	background: #25A6E1;
+	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#25A6E1',endColorstr='#188BC0',GradientType=0);
+	padding:3px 5px;
+	color:#fff;
+	font-family:'Helvetica Neue',sans-serif;
+	font-size:12px;
+	border-radius:2px;
+	-moz-border-radius:2px;
+	-webkit-border-radius:4px;
+	border:1px solid #1A87B9
+}     
+
+.red-button{
+	background: #CD5C5C;
+
+	padding:3px 5px;
+	color:#fff;
+	font-family:'Helvetica Neue',sans-serif;
+	font-size:12px;
+	border-radius:2px;
+	-moz-border-radius:2px;
+	-webkit-border-radius:4px;
+	border:1px solid #CD5C5C
+}      
+
+table {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+   width: 50%;
+}
+
+caption {
+  text-align: left;
+  color: silver;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 5px;
+}
+
+th {
+  background: SteelBlue;
+  color: white;
+}
+
+
+tbody tr:nth-child(even) {
+  background: WhiteSmoke;
+}
+
+tbody tr td:nth-child(2) {
+  text-align:center;
+}
+
+tbody tr td:nth-child(3),
+tbody tr td:nth-child(4) {
+  text-align: center;
+  font-family: monospace;
+}
+
+tfoot {
+  background: SeaGreen;
+  color: white;
+  text-align: right;
+}
+
+tfoot tr th:last-child {
+  font-family: monospace;
+}
+
+            td,th{
+                border: 1px solid gray;
+                width: 25%;
+                text-align: left;
+                padding: 5px 10px;
+            }
+          
+            
+            
+        </style> -->
+    <head>
+    <body ng-app="app" ng-controller="myController">
+         <h1>
+           AngularJS Restful web services example using $http
+        </h1> 
+        <form ng-submit="submitCountry(countryName,population)">
+            <table>
+               
+                <tr>
+                    <th colspan="2">Add/Edit country</th>
+                 </tr>
+                <tr>
+                    <td>Country</td>
+                    <td><input type="text" ng-model="countryName" /></td>
+                </tr>
+                <tr>
+                    <td>Population</td>
+                    <td><input type="text" ng-model="population"  /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit" value="Submit" /></td>
+                </tr>
+            </table>
+        </form>
+        <table>
+            <tr>
+              
+                <th>CountryName</th>
+                <th>Population</th>
+                
+               
+            <!-- </tr>
+ 
+            <tr ng-repeat="country in countries">
+               
+    <td> {{ countryName }}</td>
+    <td >{{ population }}</td>  
+                
+               
+            </tr> -->
+ 
+        </table>
+ 
+       
+ 
+       
+      
+  </body>
+</html>

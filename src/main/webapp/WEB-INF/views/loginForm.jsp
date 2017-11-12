@@ -1,0 +1,85 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Consent Manager</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+ <%-- <script src="<c:url value="/resources/js/controller.js"></c:url>"></script> --%>
+
+
+<script>
+
+var app=angular.module("app",[]);
+	app.controller("myController",function($scope,$http){
+	
+	
+	$scope.getProperties=function(){
+			alert('inside method prop')
+			$http.get('resources/connection.properties').then(function (response) {
+        	$scope.TestStringValue = response.data.TestString;
+        	$scope.BooleanValue = response.data.BooleanValue;
+                        
+          });	
+		
+	};
+		
+		$scope.getErrorLink=function(){
+			alert('inside method2'+$scope.TestStringValue)
+			
+			$http.get($scope.TestStringValue).success(function(data){
+				
+				$scope.errorLinks=data;
+				
+			});
+		};
+		
+		
+		
+		
+	});
+
+</script>
+
+
+</head>
+<body ng-app="app">
+Language : <a href="?language=en">English</a>  |  <a href="?language=fr">French</a>  |  <a href="?language=de">German</a>
+
+<form method="post" action="login" accept-charset="UTF-8">
+<div ng-controller="myController" ng-init="getProperties()">
+		<table>
+			
+			<tr>
+				<spring:message code="label.submit" var="labelSubmit"></spring:message>
+				<td colspan="2"><input type="button" ng-click="getErrorLink()" value=${labelSubmit}></td>
+			</tr>
+			
+		</table>
+
+		
+	</form>
+	
+	<div >
+			
+			
+			
+			<table>
+			<tr ng-show="errorLinks.messageLink.length > 0">
+					
+					<%-- <td><a href="<c:url value='/consentapi/consentStatus' />" target="<c:url value='_blank' />">{{errorLinks.messageLink}}</a></td> --%>
+					 <td><a href="http://localhost:8010/ConcentMgt/DataOwner.html" target="_blank">{{errorLinks.messageLink}}</a></td>
+					
+				</tr>
+						<td><div>
+		<h2>{{variable}}</h2>
+		<p>1. String value:  {{TestStringValue}}</p>
+		<p>2. Boolean value: {{BooleanValue}}</p>
+	</div><td>
+					
+				</tr>
+			
+			</table>
+			
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="lib/angular.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="lib/jqueryui.css">
+	<script src="lib/jquerymin.js"></script>
+	<script src="lib/jqueryui.js"></script>
+	<script>
+  	$(document).ready(function() {
+    		$("#datepicker").datepicker();
+	$('input[type="checkbox"]').on('change', function() {
+  		 $('input[type="checkbox"]').not(this).prop('checked', false);
+	})
+  	});
+	
+  	</script>
+</head>
+
+<body>
+<script>
+var app = angular.module('myApp', []);
+app.controller('dataOwnerctrl', function($scope,$http, $window,$filter) {
+ $scope.disableCheckbox = function () {
+		debugger;
+			document.getElementById('donotCall').disabled = true;
+			document.getElementById('optout').disabled = true;
+			document.getElementById('datepicker').disabled = true;
+               
+            };
+            
+            
+            
+            $scope.submitConsent=function(consentType,expiaryDate,option1,option2){
+            
+    alert('CTY='+$scope.consentType+" "+'ED='+$scope.expiaryDate+" "+'O1='+$scope.option1+'O2='+$scope.option2);        
+            
+            if(!($scope.consentType===null || !angular.isDefined($scope.consentType))  || !($scope.expiaryDate===null || !angular.isDefined($scope.expiaryDate)) || !($scope.option1 ===null || !angular.isDefined($scope.option1)) || !($scope.option2 ===null || !angular.isDefined($scope.option2))){
+  // alert("Insufficient Data! Please provide values for task name, description, priortiy and status");
+  
+  			
+  			alert('CTY='+$scope.consentType+'ED='+$scope.expiaryDate+'O1='+$scope.option1+'O2='+$scope.option2);
+  
+  		if(!($scope.option1 ===null || !angular.isDefined($scope.option1))){
+		
+			var countryManager={
+                           consentType:consentType,
+                           expiaryDate:expiaryDate,
+                           option1:option1
+                          }
+                          
+                          }else if(!($scope.option2 ===null || !angular.isDefined($scope.option2))){
+                          
+        	var countryManager={
+                           consentType:consentType,
+                           expiaryDate:expiaryDate,
+                           option2:option2
+                           
+                          }
+                          
+                          }
+
+			
+			//alert('inside method='+countryName)
+			$http.post('http://localhost:8010/ConcentMgt/consentapi/submitConsent',countryManager).then(
+			
+			 //alert('Inside Method'+countryName); 
+							function(response){
+                                  $scope.countryManager=response;
+                           },
+                           function(response){
+                                  $scope.error=response;
+                           }
+							
+			
+			
+			);
+			};
+		};
+            
+
+
+});
+
+</script>
+
+<div ng-app="myApp">
+<!-- header.html -->
+<!--<div ng-include="'template/header.html'"></div> -->
+	<header class="navbar-container common-navbar">
+    <nav class="navbar navbar-default navbar-fixed-top navbar-top-menu">
+        <div class="container">
+            <div class="navbar-header">
+               <a class="navbar-brand">
+                    <img src="korn-ferry-logo.jpg" alt="Korn Ferry"><span>Products</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+<!--<div ng-include="'template/content.html'"></div>-->
+<div class = "content">
+	<div class="dataOwner" ng-controller="dataOwnerctrl">
+		<div class="dataOwnerHeading"> Details of Data Owner</div>
+		<p>
+			- Hello <input type="text" class="text-line" /> you have been identified in a KF search as a potential candidate for a position we are currently hiring for.  
+		</p>
+		<p>
+			- To comply with regulations, we would like your consent to store and potentially use your data in the future for one of 5 purposes 
+			<form ng-submit="submitConsent(consentType,expiaryDate,option1,option2)">
+			<select name="consent" ng-model="consentType">
+  				<option value="Consent type1">Consent type1</option>
+  				<option value="Consent type2">Consent type2</option>
+  				<option value="Consent type3">Consent type3</option>
+  				<option value="Consent type4">Consent type4</option>
+			</select>.  
+		</p>
+		
+		<p>
+			<label>
+				<span>Expiry Date</span>
+				<input type="date"  ng-model="expiaryDate" />
+				<!--<input type="date" id="date" name="expiryDate" ng-disabled="option && option1">-->
+			</label>
+			<label>
+				<span> Do not call</span>
+				<input type="checkbox" name="doNotCall" id="donotCall" value="abc" ng-model="option1" ng-click="option2 = false">
+			</label>
+			<label>
+				<span>Opt out</span>
+				<input type="checkbox" name="optout" id="optout" value="abc" ng-model="option2" ng-disabled="!option1" ng-checked="!!option2 && !option1">
+			</label>
+			<label>
+				<input type="submit" value="Submit Consent"   /><input type="submit" value="Deny Consent" ng-click="disableCheckbox()" ng-disabled="option || option1" /><input type="submit" value="Submit donot call/opt out" />
+			</label>
+		</p>
+		</form>
+		<p>
+			- Please review the link attached and provide your consent. <a href="Privacypolicy.html" target="_blank">The Privacy policy can be viewed here.</a>
+		</p>
+		<p>
+			- If for some reason this information is inaccurate, please contact the provider to update.  If you are interested in a specific role, please apply on our internal Applicant Tracking System.  
+		</p>
+		<p>
+			- Please store this email and the link so you can cancel at a future date.  Please see this link for questions on FAQ.
+				<a href="FAQ.html" target="_blank">FAQ list</a>
+
+		</p>
+	</div>
+</div>
+<!--<div ng-include="'template/footer.html'"></div>-->
+<footer id="footer-region">
+	<div>
+		<nav class="footer navbar navbar-fixed-bottom nav-footer sub-footer">
+			<div class="container">
+				<div class="float-left legal">Korn Ferry 2017 All Rights Reserved.</div>
+				<ul id="footer-app-list" class="horizontal-ul list-float-right split">
+					<li>
+						<a href="http://static.kornferry.com/media/kornferry/Terms_of_Use_Kornferry.pdf">Terms</a>
+					</li>
+					<li>
+						<a href="https://cdn.kornferry.com/privacy/en-gb/privacy.pdf">Privacy</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</footer>
+</div>
+
+</body>
+</html>
+
